@@ -249,6 +249,7 @@ async function handleUnfollow() {
       await sleep(30000);
     }
   }
+  document.forms.item(0).innerHTML = "";
   return null;
 }
 
