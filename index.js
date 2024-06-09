@@ -245,9 +245,10 @@ async function handleUnfollow() {
       alert(`${error.username} could not be unfollowed. Error: ${error.error}`);
     }
     await sleep(Math.floor(Math.random() * 2500) + 4000);
-    if (iterations % 5 === 0 && iterations !== 0) {
+    if (iterations % 6 === 0 && iterations !== 0) {
       await sleep(30000);
     }
+    iterations++;
   }
   document.forms.item(0).innerHTML = "";
   return null;
