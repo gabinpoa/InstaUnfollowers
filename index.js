@@ -96,7 +96,7 @@ function displaySomeUnfollowers(unfollowers, limit) {
   }
 
   const ul = document.createElement("ul");
-  ul.append(unfollowersList);
+  ul.innerHTML = unfollowersList;
   document.forms.item(0).append(ul);
 }
 
@@ -110,7 +110,7 @@ function displayUnfollowers(unfollowers) {
   );
 
   const ul = document.createElement("ul");
-  ul.append(unfollowersList);
+  ul.innerHTML = unfollowersList;
   document.forms.item(0).append(ul);
 }
 
@@ -258,7 +258,5 @@ function handleCheckAll() {
     allCheckboxes[i].checked = true;
   }
 }
-
-function handleLoadMore() {}
 
 main();
