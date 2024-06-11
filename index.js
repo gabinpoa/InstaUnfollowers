@@ -24,7 +24,7 @@ async function getResults() {
     /**
      * @type {import("types").User} results
      */
-    const response = await getScanResponse(url);
+    let response = await getScanResponse(url);
 
     response.edges.forEach((x) => {
       if (!x.node.follows_viewer)
@@ -157,7 +157,7 @@ function createFormAndButtons() {
  */
 async function unfollowUser(id, username, token) {
   try {
-    await fetch(getUnfollowUrl(id), {
+    const response = await fetch(getUnfollowUrl(id), {
       headers: {
         "content-type": "application/x-www-form-urlencoded",
         "x-csrftoken": token,
@@ -166,7 +166,11 @@ async function unfollowUser(id, username, token) {
       mode: "cors",
       credentials: "include",
     });
-    console.log(username + " unfollowed successfully");
+    if (!response.ok)
+      return {
+        username,
+        error: response,
+      };
   } catch (error) {
     return { username, error };
   }
@@ -195,13 +199,7 @@ async function unfollowList(selectedUsersList, csrftoken) {
 }
 
 async function main() {
-  document.head.innerHTML = `
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Instagram Unfollowers</title>
-`;
-  document.body.innerHTML = "";
+  removeWindowListeners();
   createFormAndButtons();
 
   let unfollowers = await getResults();
@@ -259,6 +257,19 @@ function handleCheckAll() {
   for (let i = 0; i < allCheckboxes.length; i++) {
     allCheckboxes[i].checked = true;
   }
+}
+
+function removeWindowListeners() {
+  // @ts-ignore
+  for (const [k, v] of Object.entries(getEventListeners(window))) {
+    v.forEach((/** @type any */ el) => {
+      window.removeEventListener(k, el.listener);
+    });
+  }
+  const head = document.createElement("head");
+  document.head.replaceWith(head);
+  const body = document.createElement("body");
+  document.body.replaceWith(body);
 }
 
 main();
